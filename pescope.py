@@ -29,6 +29,16 @@ class Colors:
 def colorize(text, color):
     print("{}{}".format(color, text) + Colors.reset)
 
+# help
+def help():
+    colorize('PEscope Tool', Colors.pink)
+    print("""
+    Usage: pescope <file> [options]
+    \t Performs a basic static analysis to the sample provided\n
+    
+    options:
+    \t -h/--help - Displays help
+    """)
 
 # calculating the file's hashes
 def pe_hashes(filename):
@@ -64,11 +74,15 @@ def pe_libs(pe_):
 
 # PEscope interface
 
-pe = pefile.PE(sys.argv[1])
+if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.argv[1] == '--help')):
+    help()
 
-colorize("\n--------------------------------[ Hashes ]--------------------------------\n", Colors.yellow)
-pe_hashes(sys.argv[1])
+elif len(sys.argv) == 2:
+    pe = pefile.PE(sys.argv[1])
 
-colorize("\n-------------------------------[ Imports ]--------------------------------", Colors.pink)
-pe_libs(pe)
+    colorize("\n--------------------------------[ Hashes ]--------------------------------\n", Colors.yellow)
+    pe_hashes(sys.argv[1])
+
+    colorize("\n-------------------------------[ Imports ]--------------------------------", Colors.pink)
+    pe_libs(pe)
 
