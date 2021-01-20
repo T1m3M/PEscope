@@ -100,6 +100,7 @@ elif len(sys.argv) >= 2:
         if len(sys.argv) == 2:
 
             pe_hashes(sys.argv[1])
+            pe_libs(pe, False)
             pe_libs(pe, True)
 
         elif len(sys.argv) > 2:
