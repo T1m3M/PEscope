@@ -17,11 +17,12 @@ class Colors:
     purple = '\033[35m'
     cyan = '\033[36m'
     yellow = '\033[93m'
-    pink = '\033[95m'
+    pink = '\033[38;5;171m'
     lightRed = '\033[91m'
     lightGreen = '\033[92m'
     lightBlue = '\033[94m'
     lightCyan = '\033[96m'
+    bgYellow = '\033[6;30;46m'
 
 
 # colorizing texts
@@ -54,7 +55,11 @@ def pe_hashes(filename):
 def pe_libs(pe_):
 
     for lib in pe_.DIRECTORY_ENTRY_IMPORT:
-        colorize('\t' + lib.dll.decode('utf-8'), Colors.lightGreen)
+        colorize(" " + lib.dll.decode('utf-8') + " ", Colors.bgYellow)
+
+        for func in lib.imports:
+            colorize("\t- " + func.name.decode('utf-8'), Colors.cyan)
+        print('\n')
 
 
 # PEscope interface
@@ -64,6 +69,6 @@ pe = pefile.PE(sys.argv[1])
 colorize("\n--------------------------------[ Hashes ]--------------------------------\n", Colors.yellow)
 pe_hashes(sys.argv[1])
 
-colorize("\n-------------------------------[ Imports ]--------------------------------\n", Colors.pink)
+colorize("\n-------------------------------[ Imports ]--------------------------------", Colors.pink)
 pe_libs(pe)
 
