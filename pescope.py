@@ -193,11 +193,11 @@ def pe_sections(pe_):
         i += 1
 
 
-def pe_info(pe_):
+def pe_info(pe_, filename):
     colorize("\n--------------------------[ General Information ]-------------------------\n", Colors.purple)
 
     arch = "UNKNOWN"
-    file_type = "UNKNOWN"
+    file_size = os.stat(filename).st_size
 
     # determine if it's 32/64-bit
     if hex(pe_.OPTIONAL_HEADER.Magic) == '0x10b':
@@ -211,7 +211,14 @@ def pe_info(pe_):
     else:
         file_type = "DLL"
 
+    # get the size in KB or MB
+    if file_size < 1024 * 1024:
+        file_size = str(round(file_size / 1024.0, 2)) + " KB"
+    else:
+        file_size = str(round(file_size / (1024.0 * 1024.0), 2)) + " MB"
+
     colorize("File Type : " + file_type + " (" + arch + ")", Colors.yellow)
+    colorize("File Size : " + file_size, Colors.lightBlue)
 
 
 # PEscope interface
@@ -230,7 +237,7 @@ elif len(sys.argv) >= 2:
                 pe.full_load()
 
                 pe_hashes(sys.argv[-1])
-                pe_info(pe)
+                pe_info(pe, sys.argv[-1])
                 pe_libs(pe, False)
                 pe_libs(pe, True)
                 pe_sections(pe)
@@ -240,7 +247,7 @@ elif len(sys.argv) >= 2:
                     pe_hashes(sys.argv[-1])
 
                 if '-i' in sys.argv or '--info' in sys.argv:
-                    pe_info(pe)
+                    pe_info(pe, sys.argv[-1])
 
                 if '-l' in sys.argv or '--libs' in sys.argv:
                     pe.parse_data_directories()
