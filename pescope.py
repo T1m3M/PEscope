@@ -242,7 +242,7 @@ def pe_info(pe_, filename):
 
 # View the file's interesting strings
 def pe_strings(filename):
-    colorize("\n--------------------------------[ Strings ]-------------------------------\n", Colors.lightBlue)
+    colorize("\n--------------------------[ Interesting Strings ]-------------------------\n", Colors.lightBlue)
 
     with open(filename, errors="ignore") as f:
         result = ""
