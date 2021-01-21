@@ -217,8 +217,10 @@ def pe_info(pe_, filename):
     else:
         file_size = str(round(file_size / (1024.0 * 1024.0), 2)) + " MB"
 
-    colorize("File Type : " + file_type + " (" + arch + ")", Colors.yellow)
-    colorize("File Size : " + file_size, Colors.lightBlue)
+    colorize("File Type           : " + file_type + " (" + arch + ")", Colors.yellow)
+    colorize("File Size           : " + file_size, Colors.lightBlue)
+    colorize("Addr. of Entrypoint : " + hex(pe_.OPTIONAL_HEADER.AddressOfEntryPoint), Colors.lightCyan)
+    colorize("Number of Sections  : " + str(pe_.FILE_HEADER.NumberOfSections), Colors.lightGreen)
 
 
 # PEscope interface
