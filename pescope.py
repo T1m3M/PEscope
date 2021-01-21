@@ -72,6 +72,8 @@ def help():
     options:
     \t -h, --help
     \t\t Display help\n
+    \t -i, --info
+    \t\t Display general information about the sample\n
     \t -l, --libs
     \t\t Print the imported libraries\n
     \t -s, --sections
@@ -191,6 +193,10 @@ def pe_sections(pe_):
         i += 1
 
 
+def pe_info(pe_):
+    print('info')
+
+
 # PEscope interface
 
 if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.argv[1] == '--help')):
@@ -207,6 +213,7 @@ elif len(sys.argv) >= 2:
                 pe.full_load()
 
                 pe_hashes(sys.argv[-1])
+                pe_info(pe)
                 pe_libs(pe, False)
                 pe_libs(pe, True)
                 pe_sections(pe)
@@ -214,6 +221,9 @@ elif len(sys.argv) >= 2:
             elif len(sys.argv) > 2:
                 if '-H' in sys.argv or '--hash' in sys.argv:
                     pe_hashes(sys.argv[-1])
+
+                if '-i' in sys.argv or '--info' in sys.argv:
+                    pe_info(pe)
 
                 if '-l' in sys.argv or '--libs' in sys.argv:
                     pe.parse_data_directories()
