@@ -74,6 +74,8 @@ def help():
     \t\t Display help\n
     \t -l, --libs
     \t\t Print the imported libraries\n
+    \t -s, --sections
+    \t\t View the file's sections\n
     \t -H, --hash
     \t\t Print the file's hashes (md5, sha1, sha256)\n
     \t -I, --imports
