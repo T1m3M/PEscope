@@ -2,6 +2,7 @@ import os
 import sys
 import hashlib
 import pefile
+from random import randint
 
 os.system("COLOR")
 
@@ -30,17 +31,43 @@ def colorize(text, color):
     print("{}{}".format(color, text) + Colors.reset)
 
 
+def random_colors(text):
+    colors = [
+        Colors.orange,
+        Colors.lightGreen,
+        Colors.lightBlue,
+        Colors.lightCyan,
+        Colors.lightRed,
+        Colors.yellow,
+        Colors.pink,
+        Colors.cyan
+    ]
+    for letter in text:
+        r_ = randint(0, len(colors) - 1)
+        print("{}{}".format(colors[r_], letter), end='')
+
+    print(Colors.reset)
+
+
 # help
 def help():
-    colorize('PEscope Tool', Colors.pink)
+
+    print("\n\t\t\t  ", end='')
+    random_colors('PEscope Tool')
+
     print("""
-    Usage: pescope <file> [options]
+    Usage: pescope [options] <file>
     \t Performs a basic static analysis to the sample provided\n
     
     options:
-    \t -h/--help - Displays help
-    \t -i - Prints the file imports
-    \t -s - Prints the file's hashes (md5, sha1, sha256)
+    \t -h, --help
+    \t\t Display help\n
+    \t -l, --libs
+    \t\t Print the imported libraries\n
+    \t -s, --hash
+    \t\t Print the file's hashes (md5, sha1, sha256)\n
+    \t -I, --imports
+    \t\t Print all the imports\n
     """)
 
 
@@ -93,24 +120,24 @@ if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.arg
     help()
 
 elif len(sys.argv) >= 2:
-    if os.path.isfile(sys.argv[1]) and os.access(sys.argv[1], os.X_OK):
+    if os.path.isfile(sys.argv[-1]) and os.access(sys.argv[-1], os.X_OK):
 
-        pe = pefile.PE(sys.argv[1])
+        pe = pefile.PE(sys.argv[-1])
 
         if len(sys.argv) == 2:
 
-            pe_hashes(sys.argv[1])
+            pe_hashes(sys.argv[-1])
             pe_libs(pe, False)
             pe_libs(pe, True)
 
         elif len(sys.argv) > 2:
-            if '-s' in sys.argv:
-                pe_hashes(sys.argv[1])
+            if '-s' in sys.argv or '--hash' in sys.argv:
+                pe_hashes(sys.argv[-1])
 
-            if '--libs' in sys.argv:
+            if '-l' in sys.argv or '--libs' in sys.argv:
                 pe_libs(pe, False)
 
-            if '-i' in sys.argv:
+            if '-I' in sys.argv or '--imports' in sys.argv:
                 pe_libs(pe, True)
 
     else:
