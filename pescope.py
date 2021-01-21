@@ -199,31 +199,36 @@ if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.arg
 elif len(sys.argv) >= 2:
     if os.path.isfile(sys.argv[-1]) and os.access(sys.argv[-1], os.X_OK):
 
-        pe = pefile.PE(sys.argv[-1], fast_load=True)
+        try:
+            pe = pefile.PE(sys.argv[-1], fast_load=True)
 
-        if len(sys.argv) == 2:
+            if len(sys.argv) == 2:
 
-            pe.full_load()
+                pe.full_load()
 
-            pe_hashes(sys.argv[-1])
-            pe_libs(pe, False)
-            pe_libs(pe, True)
-            pe_sections(pe)
-
-        elif len(sys.argv) > 2:
-            if '-H' in sys.argv or '--hash' in sys.argv:
                 pe_hashes(sys.argv[-1])
-
-            if '-l' in sys.argv or '--libs' in sys.argv:
-                pe.parse_data_directories()
                 pe_libs(pe, False)
-
-            if '-I' in sys.argv or '--imports' in sys.argv:
-                pe.parse_data_directories()
                 pe_libs(pe, True)
-
-            if '-s' in sys.argv or '--sections' in sys.argv:
                 pe_sections(pe)
+
+            elif len(sys.argv) > 2:
+                if '-H' in sys.argv or '--hash' in sys.argv:
+                    pe_hashes(sys.argv[-1])
+
+                if '-l' in sys.argv or '--libs' in sys.argv:
+                    pe.parse_data_directories()
+                    pe_libs(pe, False)
+
+                if '-I' in sys.argv or '--imports' in sys.argv:
+                    pe.parse_data_directories()
+                    pe_libs(pe, True)
+
+                if '-s' in sys.argv or '--sections' in sys.argv:
+                    pe_sections(pe)
+
+        except pefile.PEFormatError:
+            colorize(f"Error: Only PE files are supported", Colors.lightRed)
+            exit(0)
 
     else:
         colorize('Error: Invalid executable file!', Colors.lightRed)
