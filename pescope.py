@@ -85,6 +85,8 @@ def help():
     \t\t Display general information about the sample\n
     \t -l, --libs
     \t\t Print the imported libraries\n
+    \t -m, --match <regex>
+    \t\t Match strings with a regular expression\n
     \t -s, --sections
     \t\t View the file's sections\n
     \t -H, --hash
@@ -257,8 +259,28 @@ def pe_strings(filename):
             yield result
 
 
-# PEscope interface
+def pe_match(filename, regex):
+    colorize("\n------------------------------[ match regex ]-----------------------------\n", Colors.lightBlue)
 
+    try:
+        regex_ = re.compile(regex)
+
+        with open(filename, errors="ignore") as f:
+            result = ""
+            for c in f.read():
+                if c in string.printable:
+                    result += c
+                    continue
+                if regex_.match(result):
+                    yield result
+                result = ""
+            if regex_.match(result):
+                yield result
+    except:
+        colorize("Invalid Regex", Colors.lightRed)
+
+
+# PEscope interface
 if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.argv[1] == '--help')):
     help()
 
@@ -300,6 +322,17 @@ elif len(sys.argv) >= 2:
 
                 if '-S' in sys.argv or '--strings' in sys.argv:
                     for s in pe_strings(sys.argv[-1]):
+                        print(s)
+
+                if '-m' in sys.argv or '--match' in sys.argv:
+
+                    # get the user's regex
+                    if '-m' in sys.argv:
+                        user_regex = sys.argv[sys.argv.index('-m') + 1]
+                    elif '--match' in sys.argv:
+                        user_regex = sys.argv[sys.argv.index('--match') + 1]
+
+                    for s in pe_match(sys.argv[-1], user_regex):
                         print(s)
 
         except pefile.PEFormatError:
