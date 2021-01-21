@@ -3,12 +3,20 @@ import sys
 import hashlib
 import pefile
 from random import randint
+import string
+import re
 
 os.system("COLOR")
 
 # CONSTANTS
 BUF_SIZE = 65536
 IMAGE_BASE = 0
+
+# Rgular Expressions
+EMAIL_REGEX = re.compile(r"^(?=.{10,}$)[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
+IP_REGEX = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
+URL_REGEX = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
+MSG_REGEX = re.compile(r"(?i)(error|warning|hack|success|fail|invalid)")
 
 
 class Colors:
@@ -83,6 +91,8 @@ def help():
     \t\t Print the file's hashes (md5, sha1, sha256)\n
     \t -I, --imports
     \t\t Print all the imports\n
+    \t -S, --strings
+    \t\t View the file's interesting strings (IPs, URLs, emails, errors, ...)\n
     """)
 
 
@@ -194,6 +204,7 @@ def pe_sections(pe_):
         i += 1
 
 
+# Display general information about the sample
 def pe_info(pe_, filename):
     global IMAGE_BASE
 
@@ -229,6 +240,23 @@ def pe_info(pe_, filename):
     colorize("File Alignment      : " + hex(pe_.OPTIONAL_HEADER.FileAlignment), Colors.orange)
 
 
+# View the file's interesting strings
+def pe_strings(filename):
+    colorize("\n--------------------------------[ Strings ]-------------------------------\n", Colors.lightBlue)
+
+    with open(filename, errors="ignore") as f:
+        result = ""
+        for c in f.read():
+            if c in string.printable:
+                result += c
+                continue
+            if EMAIL_REGEX.match(result) or IP_REGEX.match(result) or URL_REGEX.match(result) or MSG_REGEX.match(result):
+                yield result
+            result = ""
+        if EMAIL_REGEX.match(result) or IP_REGEX.match(result) or URL_REGEX.match(result) or MSG_REGEX.match(result):
+            yield result
+
+
 # PEscope interface
 
 if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.argv[1] == '--help')):
@@ -250,6 +278,7 @@ elif len(sys.argv) >= 2:
                 pe_libs(pe, False)
                 pe_libs(pe, True)
                 pe_sections(pe)
+                pe_strings(sys.argv[-1])
 
             elif len(sys.argv) > 2:
                 if '-H' in sys.argv or '--hash' in sys.argv:
@@ -268,6 +297,10 @@ elif len(sys.argv) >= 2:
 
                 if '-s' in sys.argv or '--sections' in sys.argv:
                     pe_sections(pe)
+
+                if '-S' in sys.argv or '--strings' in sys.argv:
+                    for s in pe_strings(sys.argv[-1]):
+                        print(s)
 
         except pefile.PEFormatError:
             colorize(f"Error: Only PE files are supported", Colors.lightRed)
