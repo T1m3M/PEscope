@@ -8,6 +8,7 @@ os.system("COLOR")
 
 # CONSTANTS
 BUF_SIZE = 65536
+IMAGE_BASE = 0
 
 
 class Colors:
@@ -194,6 +195,8 @@ def pe_sections(pe_):
 
 
 def pe_info(pe_, filename):
+    global IMAGE_BASE
+
     colorize("\n--------------------------[ General Information ]-------------------------\n", Colors.purple)
 
     arch = "UNKNOWN"
@@ -221,6 +224,9 @@ def pe_info(pe_, filename):
     colorize("File Size           : " + file_size, Colors.lightBlue)
     colorize("Addr. of Entrypoint : " + hex(pe_.OPTIONAL_HEADER.AddressOfEntryPoint), Colors.lightCyan)
     colorize("Number of Sections  : " + str(pe_.FILE_HEADER.NumberOfSections), Colors.lightGreen)
+    colorize("Image Base          : " + IMAGE_BASE, Colors.lightRed)
+    colorize("Section Alignment   : " + hex(pe_.OPTIONAL_HEADER.SectionAlignment), Colors.pink)
+    colorize("File Alignment      : " + hex(pe_.OPTIONAL_HEADER.FileAlignment), Colors.orange)
 
 
 # PEscope interface
@@ -233,6 +239,7 @@ elif len(sys.argv) >= 2:
 
         try:
             pe = pefile.PE(sys.argv[-1], fast_load=True)
+            IMAGE_BASE = hex(pe.OPTIONAL_HEADER.ImageBase)
 
             if len(sys.argv) == 2:
 
