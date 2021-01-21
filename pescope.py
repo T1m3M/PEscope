@@ -31,6 +31,7 @@ def colorize(text, color):
     print("{}{}".format(color, text) + Colors.reset)
 
 
+# random color per character
 def random_colors(text):
     colors = [
         Colors.orange,
@@ -71,7 +72,7 @@ def help():
     """)
 
 
-# calculating the file's hashes
+# Print the file's hashes
 def pe_hashes(filename):
 
     # hashes generated
@@ -94,6 +95,7 @@ def pe_hashes(filename):
     colorize("SHA256 : {}".format(sha256.hexdigest()), Colors.lightBlue)
 
 
+# Print the imports
 def pe_libs(pe_, print_all):
 
     if print_all:
