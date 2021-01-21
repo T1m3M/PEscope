@@ -64,7 +64,7 @@ def help():
     \t\t Display help\n
     \t -l, --libs
     \t\t Print the imported libraries\n
-    \t -s, --hash
+    \t -H, --hash
     \t\t Print the file's hashes (md5, sha1, sha256)\n
     \t -I, --imports
     \t\t Print all the imports\n
@@ -131,7 +131,7 @@ elif len(sys.argv) >= 2:
             pe_libs(pe, True)
 
         elif len(sys.argv) > 2:
-            if '-s' in sys.argv or '--hash' in sys.argv:
+            if '-H' in sys.argv or '--hash' in sys.argv:
                 pe_hashes(sys.argv[-1])
 
             if '-l' in sys.argv or '--libs' in sys.argv:
