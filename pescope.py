@@ -122,7 +122,7 @@ if len(sys.argv) == 1 or (len(sys.argv) == 2 and (sys.argv[1] == '-h' or sys.arg
 elif len(sys.argv) >= 2:
     if os.path.isfile(sys.argv[-1]) and os.access(sys.argv[-1], os.X_OK):
 
-        pe = pefile.PE(sys.argv[-1])
+        pe = pefile.PE(sys.argv[-1], fast_load=True)
 
         if len(sys.argv) == 2:
 
