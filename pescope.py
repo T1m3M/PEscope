@@ -194,7 +194,24 @@ def pe_sections(pe_):
 
 
 def pe_info(pe_):
-    print('info')
+    colorize("\n--------------------------[ General Information ]-------------------------\n", Colors.purple)
+
+    arch = "UNKNOWN"
+    file_type = "UNKNOWN"
+
+    # determine if it's 32/64-bit
+    if hex(pe_.OPTIONAL_HEADER.Magic) == '0x10b':
+        arch = "32-bit"
+    elif hex(pe_.OPTIONAL_HEADER.Magic) == '0x20b':
+        arch = "64-bit"
+
+    # determine if it's EXE/DLL
+    if not pe_.is_dll():
+        file_type = "EXE"
+    else:
+        file_type = "DLL"
+
+    colorize("File Type : " + file_type + " (" + arch + ")", Colors.yellow)
 
 
 # PEscope interface
