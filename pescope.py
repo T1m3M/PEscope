@@ -169,6 +169,7 @@ def sec_perm(perm):
 
 # Print the file's sections
 def pe_sections(pe_):
+    global colorful
 
     if colorful:
         headers = [
@@ -180,6 +181,8 @@ def pe_sections(pe_):
             ['Perms', Colors.bgBlueB]
         ]
 
+        row_colors = [Colors.pink, Colors.bgPurple]
+
     else:
         headers = [
             ['Section Name', '|'],
@@ -190,17 +193,14 @@ def pe_sections(pe_):
             ['Perms', '|']
         ]
 
+        row_colors = ['|', '|']
+
     colorize("\n-------------------------------[ Sections ]-------------------------------\n", Colors.lightGreen)
 
     print(' ', end='')
     for i in range(0, len(headers)):
         print(headers[i][1] + " " + headers[i][0] + " {}".format(Colors.reset), end='')
     print('')
-
-    if colorful:
-        row_colors = [Colors.pink, Colors.bgPurple]
-    else:
-        row_colors = ['|', '|']
 
     i = 0
 
