@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import sys
 import hashlib
@@ -5,7 +6,8 @@ import pefile
 import string
 import re
 
-os.system("COLOR")
+if sys.platform == 'win32' or sys.platform == 'cygwin':
+    os.system("COLOR")
 
 # CONSTANTS
 VERSION = 'v1.0 (beta)'
@@ -34,13 +36,13 @@ class Colors:
     lightGreen = '\033[92m'
     lightBlue = '\033[94m'
     lightCyan = '\033[96m'
-    bgCyanB = '\033[6;30;46m'
-    bgRedB = '\033[6;30;101m'
-    bgGreenB = '\033[6;30;102m'
-    bgYellowB = '\033[6;30;103m'
-    bgBlueB = '\033[6;30;104m'
-    bgDarkYellowB = '\033[6;30;43m'
-    bgDarkGreenB = '\033[6;30;42m'
+    bgCyanB = '\033[0;30;46m'
+    bgRedB = '\033[0;30;101m'
+    bgGreenB = '\033[0;30;102m'
+    bgYellowB = '\033[0;30;103m'
+    bgBlueB = '\033[0;30;104m'
+    bgDarkYellowB = '\033[0;30;43m'
+    bgDarkGreenB = '\033[0;30;42m'
     bgPink = '\033[48;5;165m'
     bgPurple = '\033[48;5;129m'
     bgBlue = '\033[48;5;20m'
