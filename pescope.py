@@ -171,48 +171,58 @@ def sec_perm(perm):
 def pe_sections(pe_):
     global colorful
 
-    if colorful:
-        headers = [
-            ['Section Name', Colors.bgCyanB],
-            ['Virtual Addr.', Colors.bgRedB],
-            ['Virutal Size', Colors.bgYellowB],
-            ['Raw Size', Colors.bgGreenB],
-            ['Ptr to Raw', Colors.bgDarkYellowB],
-            ['Perms', Colors.bgBlueB]
-        ]
+    headers = [
+        ['Section Name', Colors.bgCyanB],
+        ['Virtual Addr.', Colors.bgRedB],
+        ['Virutal Size', Colors.bgYellowB],
+        ['Raw Size', Colors.bgGreenB],
+        ['Ptr to Raw', Colors.bgDarkYellowB],
+        ['Perms', Colors.bgBlueB]
+    ]
 
-        row_colors = [Colors.pink, Colors.bgPurple]
-
-    else:
-        headers = [
-            ['Section Name', ''],
-            ['Virtual Addr.', ''],
-            ['Virutal Size', ''],
-            ['Raw Size', ''],
-            ['Ptr to Raw', ''],
-            ['Perms', '']
-        ]
-
-        row_colors = ['', '']
+    row_colors = [Colors.pink, Colors.bgPurple]
 
     colorize("\n-------------------------------[ Sections ]-------------------------------\n", Colors.lightGreen)
 
     print(' ', end='')
     for i in range(0, len(headers)):
-        print(headers[i][1] + " " + headers[i][0] + " {}".format(Colors.reset), end='')
+        if colorful:
+            print(headers[i][1] + " " + headers[i][0] + " {}".format(Colors.reset), end='')
+        else:
+            print(" " + headers[i][0] + " ", end='')
     print('')
+
+    if not colorful:
+        print('  ----------------------------------------------------------------------')
 
     i = 0
 
     for section in pe_.sections:
-        print(" {0}{1}{2}".format(row_colors[i%2], section.Name.decode('utf-8').strip(u'\u0000').ljust(len(headers[0][0]) + 2), Colors.reset), end='')
-        print("{0}{1}{2}".format(row_colors[i%2], hex(section.VirtualAddress).ljust(len(headers[1][0]) + 2), Colors.reset), end='')
-        print("{0}{1}{2}".format(row_colors[i%2], hex(section.Misc_VirtualSize).ljust(len(headers[2][0]) + 2), Colors.reset), end='')
-        print("{0}{1}{2}".format(row_colors[i%2], hex(section.SizeOfRawData).ljust(len(headers[3][0]) + 2), Colors.reset), end='')
-        print("{0}{1}{2}".format(row_colors[i%2], hex(section.PointerToRawData).ljust(len(headers[4][0]) + 2), Colors.reset), end='')
-        print("{0}  {1}{2}".format(row_colors[i%2], sec_perm(hex(section.Characteristics)[2]).ljust(len(headers[5][0])), Colors.reset), end='')
+        section_name = section.Name.decode('utf-8').strip(u'\u0000').ljust(len(headers[0][0]) + 2)
+        section_va = hex(section.VirtualAddress).ljust(len(headers[1][0]) + 2)
+        section_vs = hex(section.Misc_VirtualSize).ljust(len(headers[2][0]) + 2)
+        section_rs = hex(section.SizeOfRawData).ljust(len(headers[3][0]) + 2)
+        section_rptr = hex(section.PointerToRawData).ljust(len(headers[4][0]) + 2)
+        section_perms = sec_perm(hex(section.Characteristics)[2]).ljust(len(headers[5][0]))
+
+        if colorful:
+            print(" {0}{1}{2}".format(row_colors[i % 2], section_name, Colors.reset), end='')
+            print("{0}{1}{2}".format(row_colors[i % 2], section_va, Colors.reset), end='')
+            print("{0}{1}{2}".format(row_colors[i % 2], section_vs, Colors.reset), end='')
+            print("{0}{1}{2}".format(row_colors[i % 2], section_rs, Colors.reset), end='')
+            print("{0}{1}{2}".format(row_colors[i % 2], section_rptr, Colors.reset), end='')
+            print("{0}  {1}{2}".format(row_colors[i % 2], section_perms, Colors.reset), end='')
+            i += 1
+
+        else:
+            print("  " + section_name, end='')
+            print(section_va, end='')
+            print(section_vs, end='')
+            print(section_rs, end='')
+            print(section_rptr, end='')
+            print(section_perms, end='')
+
         print("")
-        i += 1
 
 
 # Display general information about the sample
