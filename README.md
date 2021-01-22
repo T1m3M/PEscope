@@ -1,4 +1,4 @@
-![PEscope Cover](/assets/pescope-cover.png)
+![PEscope Cover](/assets/PEscope-cover.png)
 
 # PEscope
 
