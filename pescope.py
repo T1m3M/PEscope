@@ -185,15 +185,15 @@ def pe_sections(pe_):
 
     else:
         headers = [
-            ['Section Name', '|'],
-            ['Virtual Addr.', '|'],
-            ['Virutal Size', '|'],
-            ['Raw Size', '|'],
-            ['Ptr to Raw', '|'],
-            ['Perms', '|']
+            ['Section Name', ''],
+            ['Virtual Addr.', ''],
+            ['Virutal Size', ''],
+            ['Raw Size', ''],
+            ['Ptr to Raw', ''],
+            ['Perms', '']
         ]
 
-        row_colors = ['|', '|']
+        row_colors = ['', '']
 
     colorize("\n-------------------------------[ Sections ]-------------------------------\n", Colors.lightGreen)
 
