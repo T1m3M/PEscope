@@ -1,3 +1,5 @@
+![PEscope Cover](/assets/pescope-cover.png)
+
 # PEscope
 
 PEscope is a simple tool for doing a basic static analysis to a PE file with a colorful CLI
@@ -59,6 +61,9 @@ Here is the list of the options you can use:
 The tool is written in Python and with the source code you can run it as a normal python file!
 
 > NOTE: If you are going with the source make sure you have python3.x installed and [pefile library](https://pypi.org/project/pefile/) using ```pip install pefile```
+
+
+![PEscope on Windows and Linux](/assets/pescope-win-linux.jpg)
 
 
 ## Windows
