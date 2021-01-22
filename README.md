@@ -5,9 +5,9 @@ PEscope is a simple tool for doing a basic static analysis to a PE file with a c
 
 ## Introduction
 
-Instead of wasting the analysis time in basic static analysis by checking the sample using the various tools out there, I decided to write a tool to perform the analysis given the sample in an organized way and most importantly with colors!
+Instead of wasting the analysis time in basic static analysis by checking the sample using the various tools out there, I decided to write my own tool to perform the analysis in an organized way and most importantly with colors!
 
-Here you can find a full walkthrough with the tool on my blog: https://t1m3m.github.io/posts/PEscope-tool
+Here you can find a full walkthrough with the tool on my blog: https://T1m3M.github.io/posts/PEscope-tool
 
 
 ## Features
