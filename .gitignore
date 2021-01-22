@@ -3,4 +3,6 @@
 
 # except
 !.gitignore
-pescope.py
+!pescope.py
+!LICENSE
+!README.md
