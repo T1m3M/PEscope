@@ -2,7 +2,6 @@ import os
 import sys
 import hashlib
 import pefile
-from random import randint
 import string
 import re
 
@@ -19,6 +18,8 @@ IP_REGEX = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
 URL_REGEX = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
 MSG_REGEX = re.compile(r"(?i)(error|warning|hack|success|fail|invalid)")
 
+# Switches
+colorful = True
 
 class Colors:
     reset = '\033[0m'
@@ -47,40 +48,26 @@ class Colors:
 
 # colorizing texts
 def colorize(text, color):
-    print("{}{}".format(color, text) + Colors.reset)
-
-
-# random color per character
-def random_colors(text):
-    colors = [
-        Colors.orange,
-        Colors.lightGreen,
-        Colors.lightBlue,
-        Colors.lightCyan,
-        Colors.lightRed,
-        Colors.yellow,
-        Colors.pink,
-        Colors.cyan
-    ]
-    for letter in text:
-        r_ = randint(0, len(colors) - 1)
-        print("{}{}".format(colors[r_], letter), end='')
-
-    print(Colors.reset, end='')
+    global colorful
+    if colorful:
+        print("{}{}".format(color, text) + Colors.reset)
+    else:
+        print(text)
 
 
 # help
 def help():
 
     print("\n\t\t\t  ", end='')
-    random_colors('PEscope Tool')
-    print(" " + VERSION)
+    print("PEscope Tool " + VERSION)
 
     print("""
     Usage: pescope [options] <file>
     \t Performs a basic static analysis to the sample provided\n
     
     options:
+    \t -c
+    \t\t No colors\n
     \t -h, --help
     \t\t Display help\n
     \t -i, --info
@@ -183,14 +170,25 @@ def sec_perm(perm):
 # Print the file's sections
 def pe_sections(pe_):
 
-    headers = [
-        ['Section Name', Colors.bgCyanB],
-        ['Virtual Addr.', Colors.bgRedB],
-        ['Virutal Size', Colors.bgYellowB],
-        ['Raw Size', Colors.bgGreenB],
-        ['Ptr to Raw', Colors.bgDarkYellowB],
-        ['Perms', Colors.bgBlueB]
-    ]
+    if colorful:
+        headers = [
+            ['Section Name', Colors.bgCyanB],
+            ['Virtual Addr.', Colors.bgRedB],
+            ['Virutal Size', Colors.bgYellowB],
+            ['Raw Size', Colors.bgGreenB],
+            ['Ptr to Raw', Colors.bgDarkYellowB],
+            ['Perms', Colors.bgBlueB]
+        ]
+
+    else:
+        headers = [
+            ['Section Name', '|'],
+            ['Virtual Addr.', '|'],
+            ['Virutal Size', '|'],
+            ['Raw Size', '|'],
+            ['Ptr to Raw', '|'],
+            ['Perms', '|']
+        ]
 
     colorize("\n-------------------------------[ Sections ]-------------------------------\n", Colors.lightGreen)
 
@@ -199,7 +197,11 @@ def pe_sections(pe_):
         print(headers[i][1] + " " + headers[i][0] + " {}".format(Colors.reset), end='')
     print('')
 
-    row_colors = [Colors.pink, Colors.bgPurple]
+    if colorful:
+        row_colors = [Colors.pink, Colors.bgPurple]
+    else:
+        row_colors = ['|', '|']
+
     i = 0
 
     for section in pe_.sections:
@@ -298,7 +300,10 @@ elif len(sys.argv) >= 2:
             pe = pefile.PE(sys.argv[-1], fast_load=True)
             IMAGE_BASE = hex(pe.OPTIONAL_HEADER.ImageBase)
 
-            if len(sys.argv) == 2:
+            if len(sys.argv) == 2 or (len(sys.argv) == 3 and '-c' in sys.argv):
+
+                if '-c' in sys.argv:
+                    colorful = False
 
                 pe.full_load()
 
@@ -309,7 +314,10 @@ elif len(sys.argv) >= 2:
                 pe_sections(pe)
                 pe_strings(sys.argv[-1])
 
-            elif len(sys.argv) > 2:
+            elif (len(sys.argv) > 2 and '-c' not in sys.argv) or (len(sys.argv) > 3 and '-c' in sys.argv):
+                if '-c' in sys.argv:
+                    colorful = False
+
                 if '-H' in sys.argv or '--hash' in sys.argv:
                     pe_hashes(sys.argv[-1])
 
