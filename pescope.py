@@ -9,10 +9,11 @@ import re
 os.system("COLOR")
 
 # CONSTANTS
+VERSION = 'v1.0 (beta)'
 BUF_SIZE = 65536
 IMAGE_BASE = 0
 
-# Rgular Expressions
+# Regular Expressions
 EMAIL_REGEX = re.compile(r"^(?=.{10,}$)[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
 IP_REGEX = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
 URL_REGEX = re.compile(r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
@@ -65,7 +66,7 @@ def random_colors(text):
         r_ = randint(0, len(colors) - 1)
         print("{}{}".format(colors[r_], letter), end='')
 
-    print(Colors.reset)
+    print(Colors.reset, end='')
 
 
 # help
@@ -73,6 +74,7 @@ def help():
 
     print("\n\t\t\t  ", end='')
     random_colors('PEscope Tool')
+    print(" " + VERSION)
 
     print("""
     Usage: pescope [options] <file>
@@ -95,6 +97,11 @@ def help():
     \t\t Print all the imports\n
     \t -S, --strings
     \t\t View the file's interesting strings (IPs, URLs, emails, errors, ...)\n
+    
+    Examples:
+    \t pescope foo.exe (perform full analysis)
+    \t pescope -i -l -s bar.dll
+    \t pescope -H -m [a-zA-Z]{5,}[\d]$ foo.exe
     """)
 
 
