@@ -77,6 +77,7 @@ For 64-bit Windows you can use the pre-compiled executable [pescope.exe](dist/) 
 If you're having a problem with the executable or a 32-bit Windows user this will do:
 
 ```console
+> pip install -r requirements.txt
 > python3 pescope.py foo.exe
 
 ```
@@ -84,7 +85,12 @@ If you're having a problem with the executable or a 32-bit Windows user this wil
 
 ## Linux
 
-First you need to give it the execute permission as follows:
+First you need to install requirements:
+```terminal
+$ pip install -r requirements.txt
+```
+
+then you need to give it the execute permission as follows:
 
 ```terminal
 $ chmod +x pescope.py
