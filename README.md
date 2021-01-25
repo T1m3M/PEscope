@@ -7,12 +7,14 @@ PEscope is a simple tool for doing a basic static analysis to a PE file with a c
 
 ## Introduction
 
+![PEscope on Windows and Linux](/assets/pescope-win-linux.jpg)
+
 Instead of wasting the analysis time in basic static analysis by checking the sample using the various tools out there, I decided to write my own tool to perform the analysis in an organized way and most importantly with colors!
 
 Here you can find a full walkthrough with the tool on my blog: https://T1m3M.github.io/posts/PEscope-tool
 
 
-## Features
+## Usage
 
 Here is the list of the options you can use:
 
@@ -56,13 +58,6 @@ Here is the list of the options you can use:
          pescope -H -m [a-zA-Z]{5,}[\d]$ foo.exe
 ```
 
-## Usage
-
-The tool is written in Python and with the source code you can run it as a normal python file!
-
-![PEscope on Windows and Linux](/assets/pescope-win-linux.jpg)
-
-
 ## Windows
 
 For 64-bit Windows you can use the pre-compiled executable [pescope.exe](dist/) in the dist directory, you can add the path to the ```PATH``` environment variable to use it from anywhere too.
@@ -103,5 +98,6 @@ Or if you want to run it from anywhere you can do:
 
 ```terminal
 $ sudo cp pescope.py /usr/bin/pescope
+$ sudo pescope bar.dll
 ```
 
